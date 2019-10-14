@@ -1,0 +1,17 @@
+
+- name: Prepare Director directory
+  file:
+    path: '{{ icinga_director_directory }}'
+    state: directory
+
+- name: Check module is present
+  stat:
+    path: '{{ icinga_director_directory }}/module.info'
+  register: _director_module
+
+- include_tasks: install-{{ icinga_director_installation_method }}.yml
+  when: not _director_module.stat.exists
+
+- include_tasks: configure-director.yml
+
+- include_tasks: configure-initial-zones.yml

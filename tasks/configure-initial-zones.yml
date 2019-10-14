@@ -1,0 +1,19 @@
+
+
+- name: "Ensure we have not new icinga2.zones"
+  lineinfile:
+    name: /etc/icinga2/zones.conf
+    regexp: "^object Endpoint NodeName"
+    state: absent
+  check_mode: yes
+  register: _have_original
+
+
+- name: Provide initial zones config (when default is found)
+  template:
+    src: zones.conf.j2
+    dest: /etc/icinga2/zones.conf
+  when: _have_original.changed
+  notify: Restart icinga
+
+- meta: flush_handlers

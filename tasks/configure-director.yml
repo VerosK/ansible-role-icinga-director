@@ -1,0 +1,25 @@
+
+- name: Make sure director is enabled
+  command: icingacli module enable director
+  args:
+    creates: /etc/icingaweb2/enabledModules/director
+
+- name: Make sure there is config directory
+  file:
+    path: '{{ icinga_director_config_location|dirname }}'
+    state: directory
+
+- name: Provide director config file
+  copy:
+    content: '{{ icinga_director_config }}'
+    dest: '{{ icinga_director_config_location }}'
+
+- name: Check Director DB migrations
+  command: icingacli  director migration pending
+  failed_when: _migrations.rc > 1
+  changed_when: _migrations.rc == 0
+  register: _migrations
+
+- name: Run DB migrations when required
+  command: icingacli  director migration run --verbose
+  when: _migrations.rc == 0

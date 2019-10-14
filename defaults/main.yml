@@ -1,0 +1,44 @@
+icinga_director_postgres: true
+icinga_director_db_type: pgsql
+icinga_director_pg_host: localhost
+icinga_director_pg_db: icinga2_director
+icinga_director_pg_user: icinga2_director
+icinga_director_pg_password: 'do-no-use-this-password'
+icinga_director_db_resource_name: 'director-db'
+
+
+# Icinga director resource
+icinga_director_db_resource: |
+  [{{ icinga_director_db_resource_name }}]
+     type = "db"
+     db = "{{ icinga_director_db_type }}"
+     host = "{{ icinga_director_pg_host }}"
+     dbname = "{{ icinga_director_pg_db }}"
+     username = "{{ icinga_director_pg_user }}"
+     password = "{{ icinga_director_pg_password }}"
+     charset = "utf8"
+
+# Icinga director
+icinga_director_config_location: "/etc/icingaweb2/modules/director/config.ini"
+icinga_director_config: |
+  ; Ansible managed, do not touch
+  [db]
+    resource = "{{ icinga_director_db_resource_name }}"
+
+icingaweb2_module_directory: "/usr/share/icingaweb2/modules/"
+
+icinga_director_dependencies:
+  - name: ipl
+    version: 0.3.0
+    archive_url: https://github.com/Icinga/icingaweb2-module-ipl/archive/v0.3.0.tar.gz
+  - name: incubator
+    version: 0.5.0
+    archive_url: https://github.com/Icinga/icingaweb2-module-incubator/archive/v0.5.0.tar.gz
+  - name: reactbundle
+    version: 0.7.0
+    archive_url: https://github.com/Icinga/icingaweb2-module-reactbundle/archive/v0.7.0.tar.gz
+
+icinga_director_directory: "{{ icingaweb2_module_directory }}/director"
+icinga_director_version: 'v1.7.1'
+icinga_director_installation_method: archive
+icinga_director_archive_url: https://github.com/Icinga/icingaweb2-module-director/archive/{{ icinga_director_version }}.tar.gz

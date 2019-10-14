@@ -1,0 +1,14 @@
+
+- include_tasks: install-module-from-archive.yml
+  loop: '{{ icinga_director_dependencies }}'
+  loop_control:
+    loop_var: module
+
+- name: Unarchive Director
+  unarchive:
+    src: '{{ icinga_director_archive_url }}'
+    dest: '{{ icinga_director_directory }}'
+    remote_src: yes
+    extra_opts:
+      - --strip
+      - '1'

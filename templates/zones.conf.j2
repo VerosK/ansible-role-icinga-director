@@ -1,0 +1,17 @@
+# Ansible provided
+# {{ ansible_managed }}
+
+object Endpoint "master" {
+}
+
+object Zone "master" {
+        endpoints = [ "master" ]
+}
+
+object Zone "global-templates" {
+        global = true
+}
+
+object Zone "director-global" {
+        global = true
+}

@@ -1,0 +1,19 @@
+
+- name: '{{ module.name }}: Create directory'
+  file:
+    path: '{{ icingaweb2_module_directory }}/{{ module.name }}'
+    state: directory
+
+- name: '{{ module.name }}: Unarchive module'
+  unarchive:
+    src: '{{ module.archive_url }}'
+    dest: '{{ icingaweb2_module_directory }}/{{ module.name }}'
+    remote_src: yes
+    extra_opts:
+      - --strip
+      - '1'
+
+- name: Make sure module is enabled
+  command: icingacli module enable {{ module.name }}
+  args:
+    creates: /etc/icingaweb2/enabledModules/{{ module.name }}
