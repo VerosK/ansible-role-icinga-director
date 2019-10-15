@@ -3,3 +3,7 @@
   service:
     name: icinga2
     state: restarted
+
+- name: Reload systemd after icinga-director update
+  command: systemctl daemon-reload
+

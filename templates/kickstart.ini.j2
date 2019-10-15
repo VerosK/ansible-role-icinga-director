@@ -1,0 +1,10 @@
+;
+; This file is required for initial Director kickstart
+; The file itself is provided by Ansible
+
+[config]
+endpoint = "master"
+host = "localhost"
+port = 5665
+username = director
+password = "{{ _icinga_director_apiuser_password }}"

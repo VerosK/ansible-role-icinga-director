@@ -1,4 +1,9 @@
 
+- name: "Setup API key when required"
+  command: icinga2 api setup
+  args:
+    creates: /var/lib/icinga2/ca/ca.crt
+  notify: Restart icinga
 
 - name: "Ensure we have not new icinga2.zones"
   lineinfile:

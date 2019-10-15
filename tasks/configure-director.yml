@@ -23,3 +23,20 @@
 - name: Run DB migrations when required
   command: icingacli  director migration run --verbose
   when: _migrations.rc == 0
+
+- name: Check we have zone director-global
+  command: icingacli director zone exists director-global
+  failed_when: _zone.rc > 1
+  changed_when: _zone.rc == 0
+  register: _zone
+
+- name: Create kickstart.ini when zone director-global does not exists
+  template:
+    src: kickstart.ini.j2
+    dest: /etc/icingaweb2/modules/director/kickstart.ini
+  when: _zone.rc == 1
+
+- name: Run kickstart
+  command: icingacli director kickstart run
+  when: _zone.rc == 1
+

@@ -1,0 +1,33 @@
+- name: Ensure icingadirector user
+  user:
+    name: icingadirector
+    shell: /bin/false
+    create_home: no
+    home: /var/lib/icingadirector
+    group: icingaweb2
+    system: true
+
+- name: Ensure icingadirector home
+  file:
+    path: /var/lib/icingadirector
+    state: directory
+    owner: icingadirector
+    group: icingaweb2
+
+
+- name: Provide systemd service name
+  copy:
+    src: '{{ icinga_director_directory }}/contrib/systemd/icinga-director.service'
+    dest: /etc/systemd/system/icinga-director.service
+    remote_src: true
+    force: false
+  notify:  Reload systemd after icinga-director update
+
+- meta: flush_handlers
+
+- name: Make sure the Director background job service is up
+  service:
+    name: icinga-director
+    enabled: true
+    state: started
+

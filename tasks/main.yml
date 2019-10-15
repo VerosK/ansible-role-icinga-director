@@ -12,6 +12,11 @@
 - include_tasks: install-{{ icinga_director_installation_method }}.yml
   when: not _director_module.stat.exists
 
+- include_tasks: configure-initial-zones.yml
+
 - include_tasks: configure-director.yml
 
-- include_tasks: configure-initial-zones.yml
+- include_tasks: configure-background-daemon.yml
+
+- include_tasks: jg-download.yml
+  when: icinga_director_with_jg

@@ -1,0 +1,7 @@
+
+- name: Download jg
+  get_url:
+    url: https://github.com/jawher/jg/releases/download/v0.1/jg-linux
+    dest: /usr/bin/jg
+    mode: 0711
+    checksum: sha256:daa8b0e0cede8edceb4395a32aae252d3877a5a7369985d7847effbe542c6cc0
