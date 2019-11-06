@@ -1,11 +1,11 @@
 # Ansible provided
 # {{ ansible_managed }}
 
-object Endpoint "master" {
+object Endpoint "{{ icinga_director_master_name }}" {
 }
 
 object Zone "master" {
-        endpoints = [ "master" ]
+        endpoints = [ "{{  icinga_director_master_name }}" ]
 }
 
 object Zone "global-templates" {
