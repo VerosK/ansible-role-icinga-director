@@ -10,9 +10,9 @@
     name: /etc/icinga2/zones.conf
     regexp: "^object Endpoint NodeName"
     state: absent
+    backup: yes
   check_mode: yes
   register: _have_original
-
 
 - name: Provide initial zones config (when default is found)
   template:

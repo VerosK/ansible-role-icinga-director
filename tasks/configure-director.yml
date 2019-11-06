@@ -20,6 +20,7 @@
   changed_when: _migrations.rc == 0
   register: _migrations
 
+
 - name: Run DB migrations when required
   command: icingacli  director migration run --verbose
   when: _migrations.rc == 0
