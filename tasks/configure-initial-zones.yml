@@ -33,7 +33,7 @@
 
 - name: "Create new TicketSalt (when required)"
   set_fact:
-      _ticket_salt: "{{ lookup('password', '/dev/null length=12 chars=0123456789abcdef) }}"
+      _ticket_salt: "{{ lookup('password', '/dev/null length=24 chars=0123456789abcdef') }}"
   when: _without_salt.changed
 
 - name: Provide new ticket salt
