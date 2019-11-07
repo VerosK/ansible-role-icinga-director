@@ -5,7 +5,7 @@
     creates: /var/lib/icinga2/ca/ca.crt
   notify: Restart icinga
 
-- name: "Ensure we have not new icinga2.zones"
+- name: "Check we have stable icinga2.zones"
   lineinfile:
     name: /etc/icinga2/zones.conf
     regexp: "^object Endpoint NodeName"
@@ -21,4 +21,30 @@
   when: _have_original.changed
   notify: Restart icinga
 
+
+- name: "Check we have TicketSalt"
+  lineinfile:
+    name: /etc/icinga2/constants.conf
+    regexp: '^const TicketSalt = ""'
+    state: absent
+    backup: yes
+  check_mode: yes
+  register: _without_salt
+
+- name: "Create new TicketSalt (when required)"
+  set_fact:
+      _ticket_salt: "{{ lookup('password', '/dev/null length=12 chars=0123456789abcdef) }}"
+  when: _without_salt.changed
+
+- name: Provide new ticket salt
+  lineinfile:
+    name: /etc/icinga2/constants.conf
+    regexp: '^const TicketSalt'
+    line: 'const TicketSalt = "{{ _ticket_salt }}"'
+    state: present
+    backup: yes
+  when: _without_salt.changed
+
 - meta: flush_handlers
+
+
